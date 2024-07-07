@@ -1,0 +1,151 @@
+const emojiScene = document.getElementById('emoji-scene');
+const restartButton = document.getElementById('restart-button');
+const downloadButton = document.getElementById('download-button');
+const downloadLink = document.getElementById('download-link');
+
+let currentStep = 0;
+const story = [
+    { emoji: '⛺️👴🏻🙌🏻🌌✨✨✨', description: 'Abraão recebe a promessa de Deus' },
+    { emoji: '👴🏻➡️🇨🇦🛤️', description: 'Abraão segue a jornada para Canaã' },
+    { emoji: '🛤️➡️🗻', description: 'Abraão viaja por montanhas' },
+    { emoji: '👴🏻👵🏻👶🏻🎉', description: 'Nascimento de Isaque, filho de Abraão e Sara' },
+    { emoji: '🔥🔥👼👴🏻🔪👦', description: 'Deus pede que Abraão sacrifique Isaque, mas envia um anjo para impedir' },
+    { emoji: '🐏🔄👦', description: 'Um carneiro é sacrificado no lugar de Isaque' },
+    { emoji: '👴🏻👵🏻💔', description: 'Sara morre e Abraão lamenta' },
+    { emoji: '👴🏻💍👰', description: 'Abraão envia um servo para encontrar uma esposa para Isaque' },
+    { emoji: '💧🕳️🐫👩‍❤️‍💋‍👨', description: 'Rebeca é escolhida como esposa de Isaque' },
+    { emoji: '👴🏻👵🏻❤️', description: 'Abraão se casa novamente com Quetura e tem mais filhos' },
+    { emoji: '⚰️👴🏻🙏', description: 'Abraão morre em idade avançada e é sepultado' }
+];
+
+let capturedImages = [];
+
+function showNextScene() {
+    if (currentStep < story.length) {
+        emojiScene.innerHTML = `<p class="emoji">${story[currentStep].emoji}</p><p class="description">${story[currentStep].description}</p>`;
+        currentStep++;
+    } else {
+        clearInterval(sceneInterval);
+        restartButton.style.display = 'inline-block';
+        downloadButton.style.display = 'inline-block';
+    }
+}
+
+function restartStory() {
+    currentStep = 0;
+    restartButton.style.display = 'none';
+    downloadButton.style.display = 'none';
+    downloadLink.style.display = 'none';
+    capturedImages = [];
+    sceneInterval = setInterval(showNextScene, 5000);
+    showNextScene();
+}
+
+async function captureScenes() {
+    for (let i = 0; i < story.length; i++) {
+        emojiScene.innerHTML = `<p class="emoji">${story[i].emoji}</p><p class="description">${story[i].description}</p>`;
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const canvas = await html2canvas(emojiScene);
+        capturedImages.push(canvas.toDataURL("image/png"));
+    }
+}
+
+function downloadVideo() {
+    captureScenes().then(() => {
+        const formData = new FormData();
+        capturedImages.forEach((image, index) => {
+            formData.append('file', dataURItoBlob(image), `scene${index}.png`);
+        });
+
+        fetch('https://api.cloudconvert.com/v2/jobs', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjhlYzBmZjNjOTdhZTgwMDFhMzQ1YzdkMzlhZWE3MWE3ZTczNzFjNjY4OWY4NzQxZmQ5YTJkMzgzNjc0MTlmODUwYmZmZTE2Y2FhOTE5MzgiLCJpYXQiOjE3MjAzOTQ0OTIuMTAzOTcsIm5iZiI6MTcyMDM5NDQ5Mi4xMDM5NzEsImV4cCI6NDg3NjA2ODA5Mi4wOTk0MSwic3ViIjoiNjg5MzE0MzEiLCJzY29wZXMiOltdfQ.lXAmhXBYFipE3jzTwqY09qOZti-_0m2bUvvQo4VZvmRXSNLgnpFQufi3EVaFQwmdgES8wbQ7AjdZtCx0uqViYkR4hnMfmBQuh0VuX3S0FfBG56ISexQCKQtTKFv48aIJUjz39WBxi8_h5p03BaIJy9CQ4-zFOiejF1gW2CQYrCJTCgvylSAdOs4Jlm5IwzFOMqkB70GKwPQukowX9HdIekjnzi9hw9Gg24dPIrEZQBlU2YIx0-Iz8NuKU5tYHUh4vYCNtfcRisq8CG22dA09FVjC7XvN4tIQzpXnFPkmMstFbeQzcC5ZI5z_GmSJYIxE30AcRXbjnoBdfAj-SF4MohvdkXIx0gbSRhHVsHMe49KJl4CUBd5lwwLRY5AoSD8vsPKXk7Eb-fySqw2yykD6DN0zaau-MbR2oqVCF1dFKPybLxOcvi30Kjh07-HjQpEFgbNBx8LmShQzQplLIGKCCvUAF8H0yw7YbJrPHp4C5MhuLQtEQ4yA8vHG_fSp-iDICoivI4SYU2jiof2AP8syYyg8vv9k86WWDNkMu0xgK1HBcizxu90Eufp_WNJlUo8jm5AggiM3EEyozny0lMGXB_r89lIDQCZUUg_nNfhdWMrR6V5VtNXUyryK045u26VzHEekcV-nEbbdWhLorCFxzbIekh8L71fkyu0_0E-bu6E', // Substitua SUA_CHAVE_DE_API_AQUI com sua chave de API
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                tasks: {
+                    'upload-my-file': {
+                        operation: 'import/upload'
+                    },
+                    'convert-my-file': {
+                        operation: 'convert',
+                        input: 'upload-my-file',
+                        output_format: 'mp4',
+                        input_format: 'png',
+                        output: {
+                            video_codec: 'libx264',
+                            video_bitrate: '1M',
+                            framerate: 1,
+                            width: 800,
+                            height: 600
+                        }
+                    },
+                    'export-my-file': {
+                        operation: 'export/url',
+                        input: 'convert-my-file'
+                    }
+                }
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const uploadTask = data.data.tasks.find(task => task.operation === 'import/upload');
+            const uploadUrl = uploadTask.result.form.url;
+            const formDataUpload = new FormData();
+
+            // Adicionar todos os arquivos ao FormData para serem carregados
+            capturedImages.forEach((image, index) => {
+                formDataUpload.append('file', dataURItoBlob(image), `scene${index}.png`);
+            });
+
+            // Realizar o upload dos arquivos
+            fetch(uploadUrl, {
+                method: 'POST',
+                body: formDataUpload
+            })
+            .then(() => {
+                // Aguardar a conclusão do trabalho
+                const.then(() => {
+                // Aguardar a conclusão do trabalho
+                const jobId = data.data.id;
+                const pollInterval = setInterval(() => {
+                    fetch(`https://api.cloudconvert.com/v2/jobs/${jobId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjhlYzBmZjNjOTdhZTgwMDFhMzQ1YzdkMzlhZWE3MWE3ZTczNzFjNjY4OWY4NzQxZmQ5YTJkMzgzNjc0MTlmODUwYmZmZTE2Y2FhOTE5MzgiLCJpYXQiOjE3MjAzOTQ0OTIuMTAzOTcsIm5iZiI6MTcyMDM5NDQ5Mi4xMDM5NzEsImV4cCI6NDg3NjA2ODA5Mi4wOTk0MSwic3ViIjoiNjg5MzE0MzEiLCJzY29wZXMiOltdfQ.lXAmhXBYFipE3jzTwqY09qOZti-_0m2bUvvQo4VZvmRXSNLgnpFQufi3EVaFQwmdgES8wbQ7AjdZtCx0uqViYkR4hnMfmBQuh0VuX3S0FfBG56ISexQCKQtTKFv48aIJUjz39WBxi8_h5p03BaIJy9CQ4-zFOiejF1gW2CQYrCJTCgvylSAdOs4Jlm5IwzFOMqkB70GKwPQukowX9HdIekjnzi9hw9Gg24dPIrEZQBlU2YIx0-Iz8NuKU5tYHUh4vYCNtfcRisq8CG22dA09FVjC7XvN4tIQzpXnFPkmMstFbeQzcC5ZI5z_GmSJYIxE30AcRXbjnoBdfAj-SF4MohvdkXIx0gbSRhHVsHMe49KJl4CUBd5lwwLRY5AoSD8vsPKXk7Eb-fySqw2yykD6DN0zaau-MbR2oqVCF1dFKPybLxOcvi30Kjh07-HjQpEFgbNBx8LmShQzQplLIGKCCvUAF8H0yw7YbJrPHp4C5MhuLQtEQ4yA8vHG_fSp-iDICoivI4SYU2jiof2AP8syYyg8vv9k86WWDNkMu0xgK1HBcizxu90Eufp_WNJlUo8jm5AggiM3EEyozny0lMGXB_r89lIDQCZUUg_nNfhdWMrR6V5VtNXUyryK045u26VzHEekcV-nEbbdWhLorCFxzbIekh8L71fkyu0_0E-bu6E' // Substitua SUA_CHAVE_DE_API_AQUI com sua chave de API
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(jobData => {
+                        const exportTask = jobData.data.tasks.find(task => task.operation === 'export/url' && task.status === 'finished');
+                        if (exportTask) {
+                            clearInterval(pollInterval);
+                            const videoUrl = exportTask.result.files[0].url;
+                            downloadLink.href = videoUrl;
+                            downloadLink.style.display = 'inline-block';
+                        }
+                    });
+                }, 5000); // Verificar a cada 5 segundos
+            });
+        })
+        .catch(error => console.error('Erro:', error));
+    });
+}
+
+function dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+}
+
+let sceneInterval = setInterval(showNextScene, 5000);
+showNextScene();
+
+restartButton.addEventListener('click', restartStory);
+downloadButton.addEventListener('click', downloadVideo);
