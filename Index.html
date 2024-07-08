@@ -13,20 +13,31 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
 
         .container {
             text-align: center;
             width: 80%;
             max-width: 600px;
+            position: relative;
+        }
+
+        .story-item {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        .story-item.visible {
+            opacity: 1;
         }
 
         .emoji {
             font-size: 3rem;
-        }
-
-        .story-item {
-            margin: 20px 0;
         }
 
         .buttons {
@@ -57,6 +68,10 @@
             <button onclick="downloadVideo()">Baixar Vídeo</button>
         </div>
     </div>
+    <audio id="backgroundMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-epic.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
     <script>
         const story = [
             { emoji: "🌟", text: "Deus chamou Abrão e disse para ele sair de sua terra natal e ir para uma terra que Ele lhe mostraria." },
@@ -78,18 +93,29 @@
             { emoji: "🕊️", text: "Abraão viveu 175 anos e morreu em boa velhice. Ele foi enterrado junto a Sara na caverna de Macpela." },
         ];
 
+        let currentIndex = 0;
+
         function displayStory() {
             const storyContainer = document.getElementById('story');
             storyContainer.innerHTML = '';
-            story.forEach(item => {
-                const storyItem = document.createElement('div');
-                storyItem.className = 'story-item';
-                storyItem.innerHTML = `<div class="emoji">${item.emoji}</div><div>${item.text}</div>`;
-                storyContainer.appendChild(storyItem);
-            });
+            const storyItem = document.createElement('div');
+            storyItem.className = 'story-item';
+            storyItem.innerHTML = `<div class="emoji">${story[currentIndex].emoji}</div><div>${story[currentIndex].text}</div>`;
+            storyContainer.appendChild(storyItem);
+            setTimeout(() => {
+                storyItem.classList.add('visible');
+                setTimeout(() => {
+                    storyItem.classList.remove('visible');
+                    currentIndex++;
+                    if (currentIndex < story.length) {
+                        setTimeout(displayStory, 1000); // Intervalo entre cenas
+                    }
+                }, 3000); // Duração da exibição de cada cena
+            }, 100);
         }
 
         function restartStory() {
+            currentIndex = 0;
             displayStory();
         }
 
@@ -100,7 +126,10 @@
             link.click();
         }
 
-        document.addEventListener('DOMContentLoaded', displayStory);
+        document.addEventListener('DOMContentLoaded', () => {
+            displayStory();
+            document.getElementById('backgroundMusic').play();
+        });
     </script>
 </body>
 </html>
