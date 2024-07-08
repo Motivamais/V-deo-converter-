@@ -109,10 +109,10 @@
         const enemyTop = parseInt(window.getComputedStyle(enemy).getPropertyValue('top'));
 
         if (
-          carLeft < enemyLeft + 40 &&
-          carLeft + 40 > enemyLeft &&
-          carBottom < enemyTop + 40 &&
-          carBottom + 40 > enemyTop
+          carLeft < enemyLeft + 30 &&
+          carLeft + 30 > enemyLeft &&
+          carBottom < 500 - enemyTop &&
+          carBottom + 30 > 500 - enemyTop - 40
         ) {
           isGameOver = true;
           alert('Game Over! Your score is ' + score);
