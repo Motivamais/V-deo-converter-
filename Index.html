@@ -1,213 +1,106 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>História de Abraão em Emojis</title>
+    <title>História de Abraão</title>
     <style>
         body {
-            background: linear-gradient(to right, #ffecd2, #fcb69f);
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: Arial, sans-serif;
         }
 
         .container {
             text-align: center;
+            width: 80%;
+            max-width: 600px;
         }
 
-        #emoji-scene {
-            font-size: 5em;
-            margin-bottom: 20px;
-            transition: opacity 0.5s ease;
+        .emoji {
+            font-size: 3rem;
         }
 
-        .description {
-            font-size: 1.2em;
-            margin-top: 10px;
+        .story-item {
+            margin: 20px 0;
         }
 
-        #restart-button, #download-button {
+        .buttons {
+            margin-top: 20px;
+        }
+
+        button {
             padding: 10px 20px;
-            font-size: 1em;
-            background-color: #4CAF50;
+            font-size: 16px;
+            margin: 0 10px;
+            cursor: pointer;
+            background-color: #007bff;
             color: white;
             border: none;
-            cursor: pointer;
             border-radius: 5px;
-            margin: 5px;
         }
 
-        #restart-button:hover, #download-button:hover {
-            background-color: #45a049;
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="emoji-scene">
-            <p class="emoji">⛺️👴🏻🙌🏻🌌✨✨✨</p>
-            <p class="description">Abraão recebe a promessa de Deus</p>
+        <div id="story"></div>
+        <div class="buttons">
+            <button onclick="restartStory()">Reiniciar</button>
+            <button onclick="downloadVideo()">Baixar Vídeo</button>
         </div>
-        <button id="restart-button" style="display: none;">Reiniciar</button>
-        <button id="download-button">Baixar Vídeo</button>
-        <a id="download-link" href="#" style="display: none;">Baixe o vídeo aqui</a>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
-        const emojiScene = document.getElementById('emoji-scene');
-        const restartButton = document.getElementById('restart-button');
-        const downloadButton = document.getElementById('download-button');
-        const downloadLink = document.getElementById('download-link');
-
-        let currentStep = 0;
         const story = [
-            { emoji: '⛺️👴🏻🙌🏻🌌✨✨✨', description: 'Abraão recebe a promessa de Deus' },
-            { emoji: '👴🏻➡️🇨🇦🛤️', description: 'Abraão segue a jornada para Canaã' },
-            { emoji: '🛤️➡️🗻', description: 'Abraão viaja por montanhas' },
-            { emoji: '👴🏻👵🏻👶🏻🎉', description: 'Nascimento de Isaque, filho de Abraão e Sara' },
-            { emoji: '🔥🔥👼👴🏻🔪👦', description: 'Deus pede que Abraão sacrifique Isaque, mas envia um anjo para impedir' },
-            { emoji: '🐏🔄👦', description: 'Um carneiro é sacrificado no lugar de Isaque' },
-            { emoji: '👴🏻👵🏻💔', description: 'Sara morre e Abraão lamenta' },
-            { emoji: '👴🏻💍👰', description: 'Abraão envia um servo para encontrar uma esposa para Isaque' },
-            { emoji: '💧🕳️🐫👩‍❤️‍💋‍👨', description: 'Rebeca é escolhida como esposa de Isaque' },
-            { emoji: '👴🏻👵🏻❤️', description: 'Abraão se casa novamente com Quetura e tem mais filhos' },
-            { emoji: '⚰️👴🏻🙏', description: 'Abraão morre em idade avançada e é sepultado' }
+            { emoji: "🌟", text: "Deus chamou Abrão e disse para ele sair de sua terra natal e ir para uma terra que Ele lhe mostraria." },
+            { emoji: "🧔", text: "Abrão, obediente, partiu com sua esposa Sarai e seu sobrinho Ló." },
+            { emoji: "🌌", text: "Deus prometeu a Abrão que ele seria o pai de uma grande nação e que sua descendência seria tão numerosa quanto as estrelas no céu." },
+            { emoji: "🇪🇬", text: "Devido a uma grande fome na terra, Abrão e Sarai foram para o Egito." },
+            { emoji: "🏰", text: "No Egito, o faraó levou Sarai para seu palácio, mas quando descobriu a verdade, devolveu Sarai e mandou que eles deixassem o Egito." },
+            { emoji: "🧔‍♂️", text: "Abrão e Ló tinham muitos rebanhos e houve um conflito entre seus pastores. Para evitar disputas, Abrão sugeriu que se separassem." },
+            { emoji: "🌾", text: "Ló escolheu a fértil planície do Jordão, enquanto Abrão ficou em Canaã." },
+            { emoji: "🏜️", text: "Deus renovou Sua promessa a Abrão, dizendo que sua descendência possuiria toda a terra que ele via e que seria inumerável como o pó da terra." },
+            { emoji: "🤰", text: "Sarai, sendo estéril, deu sua serva Hagar a Abrão para que ele tivesse um filho. Hagar deu à luz Ismael." },
+            { emoji: "👨‍👩‍👧‍👦", text: "Deus mudou o nome de Abrão para Abraão, que significa 'pai de muitos', e Sarai para Sara, que significa 'princesa'." },
+            { emoji: "😂", text: "Deus prometeu a Abraão que Sara daria à luz um filho, que se chamaria Isaque, apesar de sua velhice. Abraão e Sara riram da promessa." },
+            { emoji: "🔥", text: "Deus informou a Abraão que destruiria as cidades de Sodoma e Gomorra. Abraão intercedeu por elas, mas não havia justos suficientes, e as cidades foram destruídas." },
+            { emoji: "🍼", text: "Finalmente, Sara deu à luz Isaque, conforme prometido. Abraão tinha 100 anos e Sara 90 quando Isaque nasceu." },
+            { emoji: "🗡️", text: "Deus testou a fé de Abraão, pedindo que ele sacrificasse Isaque. No momento do sacrifício, um anjo do Senhor o interrompeu e providenciou um carneiro para o sacrifício." },
+            { emoji: "🌹", text: "Sara viveu 127 anos e morreu em Hebrom. Abraão comprou um campo com uma caverna para enterrá-la, o que se tornou o túmulo da família." },
+            { emoji: "💍", text: "Abraão enviou seu servo para buscar uma esposa para Isaque. O servo encontrou Rebeca, que se tornou esposa de Isaque, garantindo a continuidade da linhagem de Abraão." },
+            { emoji: "🕊️", text: "Abraão viveu 175 anos e morreu em boa velhice. Ele foi enterrado junto a Sara na caverna de Macpela." },
         ];
 
-        let capturedImages = [];
-
-        function showNextScene() {
-            if (currentStep < story.length) {
-                emojiScene.innerHTML = `<p class="emoji">${story[currentStep].emoji}</p><p class="description">${story[currentStep].description}</p>`;
-                currentStep++;
-            } else {
-                clearInterval(sceneInterval);
-                restartButton.style.display = 'inline-block';
-                downloadButton.style.display = 'inline-block';
-            }
+        function displayStory() {
+            const storyContainer = document.getElementById('story');
+            storyContainer.innerHTML = '';
+            story.forEach(item => {
+                const storyItem = document.createElement('div');
+                storyItem.className = 'story-item';
+                storyItem.innerHTML = `<div class="emoji">${item.emoji}</div><div>${item.text}</div>`;
+                storyContainer.appendChild(storyItem);
+            });
         }
 
         function restartStory() {
-            currentStep = 0;
-            restartButton.style.display = 'none';
-            downloadButton.style.display = 'none';
-            downloadLink.style.display = 'none';
-            capturedImages = [];
-            sceneInterval = setInterval(showNextScene, 5000);
-            showNextScene();
-        }
-
-        async function captureScenes() {
-            for (let i = 0; i < story.length; i++) {
-                emojiScene.innerHTML = `<p class="emoji">${story[i].emoji}</p><p class="description">${story[i].description}</p>`;
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                const canvas = await html2canvas(emojiScene);
-                capturedImages.push(canvas.toDataURL("image/png"));
-            }
+            displayStory();
         }
 
         function downloadVideo() {
-            captureScenes().then(() => {
-                const formData = new FormData();
-                capturedImages.forEach((image, index) => {
-                    formData.append('file', dataURItoBlob(image), `scene${index}.png`);
-                });
-
-                fetch('https://api.cloudconvert.com/v2/jobs', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjhlYzBmZjNjOTdhZTgwMDFhMzQ1YzdkMzlhZWE3MWE3ZTczNzFjNjY4OWY4NzQxZmQ5YTJkMzgzNjc0MTlmODUwYmZmZTE2Y2FhOTE5MzgiLCJpYXQiOjE3MjAzOTQ0OTIuMTAzOTcsIm5iZiI6MTcyMDM5NDQ5Mi4xMDM5NzEsImV4cCI6NDg3NjA2ODA5Mi4wOTk0MSwic3ViIjoiNjg5MzE0MzEiLCJzY29wZXMiOltdfQ.lXAmhXBYFipE3jzTwqY09qOZti-_0m2bUvvQo4VZvmRXSNLgnpFQufi3EVaFQwmdgES8wbQ7AjdZtCx0uqViYkR4hnMfmBQuh0VuX3S0FfBG56ISexQCKQtTKFv48aIJUjz39WBxi8_h5p03BaIJy9CQ4-zFOiejF1gW2CQYrCJTCgvylSAdOs4Jlm5IwzFOMqkB70GKwPQukowX9HdIekjnzi9hw9Gg24dPIrEZQBlU2YIx0-Iz8NuKU5tYHUh4vYCNtfcRisq8CG22dA09FVjC7XvN4tIQzpXnFPkmMstFbeQzcC5ZI5z_GmSJYIxE30AcRXbjnoBdfAj-SF4MohvdkXIx0gbSRhHVsHMe49KJl4CUBd5lwwLRY5AoSD8vsPKXk7Eb-fySqw2yykD6DN0zaau-MbR2oqVCF1dFKPybLxOcvi30Kjh07-HjQpEFgbNBx8LmShQzQplLIGKCCvUAF8H0yw7YbJrPHp4C5MhuLQtEQ4yA8vHG_fSp-iDICoivI4SYU2jiof2AP8syYyg8vv9k86WWDNkMu0xgK1HBcizxu90Eufp_WNJlUo8jm5AggiM3EEyozny0lMGXB_r89lIDQCZUUg_nNfhdWMrR6V5VtNXUyryK045u26VzHEekcV-nEbbdWhLorCFxzbIekh
-                            07-HjQpEFgbNBx8LmShQzQplLIGKCCvUAF8H0yw7YbJrPHp4C5MhuLQtEQ4yA8vHG_fSp-iDICoivI4SYU2jiof2AP8syYyg8vv9k86WWDNkMu0xgK1HBcizxu90Eufp_WNJlUo8jm5AggiM3EEyozny0lMGXB_r89lIDQCZUUg_nNfhdWMrR6V5VtNXUyryK045u26VzHEekcV-nEbbdWhLorCFxzbIekh8L71fkyu0_0E-bu6E', // Substitua SUA_CHAVE_DE_API_AQUI com sua chave de API
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    tasks: {
-                        'upload-my-file': {
-                            operation: 'import/upload'
-                        },
-                        'convert-my-file': {
-                            operation: 'convert',
-                            input: 'upload-my-file',
-                            output_format: 'mp4',
-                            input_format: 'png',
-                            output: {
-                                video_codec: 'libx264',
-                                video_bitrate: '1M',
-                                framerate: 1,
-                                width: 800,
-                                height: 600
-                            }
-                        },
-                        'export-my-file': {
-                            operation: 'export/url',
-                            input: 'convert-my-file'
-                        }
-                    }
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const uploadTask = data.data.tasks.find(task => task.operation === 'import/upload');
-                const uploadUrl = uploadTask.result.form.url;
-                const formDataUpload = new FormData();
-
-                // Adicionar todos os arquivos ao FormData para serem carregados
-                capturedImages.forEach((image, index) => {
-                    formDataUpload.append('file', dataURItoBlob(image), `scene${index}.png`);
-                });
-
-                // Realizar o upload dos arquivos
-                fetch(uploadUrl, {
-                    method: 'POST',
-                    body: formDataUpload
-                })
-                .then(() => {
-                    // Aguardar a conclusão do trabalho
-                    const jobId = data.data.id;
-                    const pollInterval = setInterval(() => {
-                        fetch(`https://api.cloudconvert.com/v2/jobs/${jobId}`, {
-                            method: 'GET',
-                            headers: {
-                                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjhlYzBmZjNjOTdhZTgwMDFhMzQ1YzdkMzlhZWE3MWE3ZTczNzFjNjY4OWY4NzQxZmQ5YTJkMzgzNjc0MTlmODUwYmZmZTE2Y2FhOTE5MzgiLCJpYXQiOjE3MjAzOTQ0OTIuMTAzOTcsIm5iZiI6MTcyMDM5NDQ5Mi4xMDM5NzEsImV4cCI6NDg3NjA2ODA5Mi4wOTk0MSwic3ViIjoiNjg5MzE0MzEiLCJzY29wZXMiOltdfQ.lXAmhXBYFipE3jzTwqY09qOZti-_0m2bUvvQo4VZvmRXSNLgnpFQufi3EVaFQwmdgES8wbQ7AjdZtCx0uqViYkR4hnMfmBQuh0VuX3S0FfBG56ISexQCKQtTKFv48aIJUjz39WBxi8_h5p03BaIJy9CQ4-zFOiejF1gW2CQYrCJTCgvylSAdOs4Jlm5IwzFOMqkB70GKwPQukowX9HdIekjnzi9hw9Gg24dPIrEZQBlU2YIx0-Iz8NuKU5tYHUh4vYCNtfcRisq8CG22dA09FVjC7XvN4tIQzpXnFPkmMstFbeQzcC5ZI5z_GmSJYIxE30AcRXbjnoBdfAj-SF4MohvdkXIx0gbSRhHVsHMe49KJl4CUBd5lwwLRY5AoSD8vsPKXk7Eb-fySqw2yykD6DN0zaau-MbR2oqVCF1dFKPybLxOcvi30Kjh07-HjQpEFgbNBx8LmShQzQplLIGKCCvUAF8H0yw7YbJrPHp4C5MhuLQtEQ4yA8vHG_fSp-iDICoivI4SYU2jiof2AP8syYyg8vv9k86WWDNkMu0xgK1HBcizxu90Eufp_WNJlUo8jm5AggiM3EEyozny0lMGXB_r89lIDQCZUUg_nNfhdWMrR6V5VtNXUyryK045u26VzHEekcV-nEbbdWhLorCFxzbIekh8L71fkyu0_0E-bu6E' // Substitua SUA_CHAVE_DE_API_AQUI com sua chave de API
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(jobData => {
-                            const exportTask = jobData.data.tasks.find(task => task.operation === 'export/url' && task.status === 'finished');
-                            if (exportTask) {
-                                clearInterval(pollInterval);
-                                const videoUrl = exportTask.result.files[0].url;
-                                downloadLink.href = videoUrl;
-                                downloadLink.style.display = 'inline-block';
-                            }
-                        });
-                    }, 5000); // Verificar a cada 5 segundos
-                });
-            })
-            .catch(error => console.error('Erro:', error));
-        });
-    }
-
-    function dataURItoBlob(dataURI) {
-        const byteString = atob(dataURI.split(',')[1]);
-        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-        const ab = new ArrayBuffer(byteString.length);
-        const ia = new Uint8Array(ab);
-        for (let i = 0; i < byteString.length; i++) {
-            ia[i] = byteString.charCodeAt(i);
+            const link = document.createElement('a');
+            link.href = 'https://example.com/video.mp4'; // Substitua pelo link correto do vídeo
+            link.download = 'historia_de_abraao.mp4';
+            link.click();
         }
-        return new Blob([ab], { type: mimeString });
-    }
 
-    let sceneInterval = setInterval(showNextScene, 5000);
-    showNextScene();
-
-    restartButton.addEventListener('click', restartStory);
-    downloadButton.addEventListener('click', downloadVideo);
+        document.addEventListener('DOMContentLoaded', displayStory);
     </script>
 </body>
 </html>
