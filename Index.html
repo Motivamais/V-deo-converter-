@@ -1,135 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>História de Abraão</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emoji Car Racing Game</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
 
-        .container {
-            text-align: center;
-            width: 80%;
-            max-width: 600px;
-            position: relative;
-        }
+    .game-container {
+      position: relative;
+      width: 300px;
+      height: 500px;
+      border: 2px solid #000;
+      overflow: hidden;
+      background: url('https://i.imgur.com/9mNf2W0.png') repeat-y center center;
+      background-size: cover;
+    }
 
-        .story-item {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 1s;
-        }
+    .game-area {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
 
-        .story-item.visible {
-            opacity: 1;
-        }
+    .car {
+      position: absolute;
+      bottom: 10px;
+      left: calc(50% - 20px);
+      font-size: 40px;
+    }
 
-        .emoji {
-            font-size: 3rem;
-        }
+    .enemy {
+      position: absolute;
+      font-size: 40px;
+    }
 
-        .buttons {
-            margin-top: 20px;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin: 0 10px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    .score-board {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 20px;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div id="story"></div>
-        <div class="buttons">
-            <button onclick="restartStory()">Reiniciar</button>
-            <button onclick="downloadVideo()">Baixar Vídeo</button>
-        </div>
+  <div class="game-container">
+    <div class="game-area" id="gameArea">
+      <div class="car" id="car">🚗</div>
     </div>
-    <audio id="backgroundMusic" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-epic.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-    <script>
-        const story = [
-            { emoji: "🌟", text: "Deus chamou Abrão e disse para ele sair de sua terra natal e ir para uma terra que Ele lhe mostraria." },
-            { emoji: "🧔", text: "Abrão, obediente, partiu com sua esposa Sarai e seu sobrinho Ló." },
-            { emoji: "🌌", text: "Deus prometeu a Abrão que ele seria o pai de uma grande nação e que sua descendência seria tão numerosa quanto as estrelas no céu." },
-            { emoji: "🇪🇬", text: "Devido a uma grande fome na terra, Abrão e Sarai foram para o Egito." },
-            { emoji: "🏰", text: "No Egito, o faraó levou Sarai para seu palácio, mas quando descobriu a verdade, devolveu Sarai e mandou que eles deixassem o Egito." },
-            { emoji: "🧔‍♂️", text: "Abrão e Ló tinham muitos rebanhos e houve um conflito entre seus pastores. Para evitar disputas, Abrão sugeriu que se separassem." },
-            { emoji: "🌾", text: "Ló escolheu a fértil planície do Jordão, enquanto Abrão ficou em Canaã." },
-            { emoji: "🏜️", text: "Deus renovou Sua promessa a Abrão, dizendo que sua descendência possuiria toda a terra que ele via e que seria inumerável como o pó da terra." },
-            { emoji: "🤰", text: "Sarai, sendo estéril, deu sua serva Hagar a Abrão para que ele tivesse um filho. Hagar deu à luz Ismael." },
-            { emoji: "👨‍👩‍👧‍👦", text: "Deus mudou o nome de Abrão para Abraão, que significa 'pai de muitos', e Sarai para Sara, que significa 'princesa'." },
-            { emoji: "😂", text: "Deus prometeu a Abraão que Sara daria à luz um filho, que se chamaria Isaque, apesar de sua velhice. Abraão e Sara riram da promessa." },
-            { emoji: "🔥", text: "Deus informou a Abraão que destruiria as cidades de Sodoma e Gomorra. Abraão intercedeu por elas, mas não havia justos suficientes, e as cidades foram destruídas." },
-            { emoji: "🍼", text: "Finalmente, Sara deu à luz Isaque, conforme prometido. Abraão tinha 100 anos e Sara 90 quando Isaque nasceu." },
-            { emoji: "🗡️", text: "Deus testou a fé de Abraão, pedindo que ele sacrificasse Isaque. No momento do sacrifício, um anjo do Senhor o interrompeu e providenciou um carneiro para o sacrifício." },
-            { emoji: "🌹", text: "Sara viveu 127 anos e morreu em Hebrom. Abraão comprou um campo com uma caverna para enterrá-la, o que se tornou o túmulo da família." },
-            { emoji: "💍", text: "Abraão enviou seu servo para buscar uma esposa para Isaque. O servo encontrou Rebeca, que se tornou esposa de Isaque, garantindo a continuidade da linhagem de Abraão." },
-            { emoji: "🕊️", text: "Abraão viveu 175 anos e morreu em boa velhice. Ele foi enterrado junto a Sara na caverna de Macpela." },
-        ];
+    <div class="score-board">
+      <p>Score: <span id="score">0</span></p>
+    </div>
+  </div>
+  <script>
+    const car = document.getElementById('car');
+    const gameArea = document.getElementById('gameArea');
+    const scoreBoard = document.getElementById('score');
+    let score = 0;
+    let gameSpeed = 2;
+    let enemies = [];
+    let isGameOver = false;
 
-        let currentIndex = 0;
+    document.addEventListener('keydown', moveCar);
 
-        function displayStory() {
-            const storyContainer = document.getElementById('story');
-            storyContainer.innerHTML = '';
-            const storyItem = document.createElement('div');
-            storyItem.className = 'story-item';
-            storyItem.innerHTML = `<div class="emoji">${story[currentIndex].emoji}</div><div>${story[currentIndex].text}</div>`;
-            storyContainer.appendChild(storyItem);
-            setTimeout(() => {
-                storyItem.classList.add('visible');
-                setTimeout(() => {
-                    storyItem.classList.remove('visible');
-                    currentIndex++;
-                    if (currentIndex < story.length) {
-                        setTimeout(displayStory, 1000); // Intervalo entre cenas
-                    }
-                }, 3000); // Duração da exibição de cada cena
-            }, 100);
+    function moveCar(event) {
+      const left = parseInt(window.getComputedStyle(car).getPropertyValue('left'));
+      if (event.key === 'ArrowLeft' && left > 0) {
+        car.style.left = left - 10 + 'px';
+      } else if (event.key === 'ArrowRight' && left < 260) {
+        car.style.left = left + 10 + 'px';
+      }
+    }
+
+    function createEnemy() {
+      const enemy = document.createElement('div');
+      enemy.classList.add('enemy');
+      enemy.innerHTML = '🚓';
+      enemy.style.top = '0px';
+      enemy.style.left = Math.floor(Math.random() * 260) + 'px';
+      gameArea.appendChild(enemy);
+      enemies.push(enemy);
+    }
+
+    function moveEnemies() {
+      enemies.forEach((enemy, index) => {
+        const top = parseInt(window.getComputedStyle(enemy).getPropertyValue('top'));
+        if (top >= 500) {
+          enemies.splice(index, 1);
+          enemy.remove();
+          score++;
+          scoreBoard.textContent = score;
+        } else {
+          enemy.style.top = top + gameSpeed + 'px';
         }
 
-        function restartStory() {
-            currentIndex = 0;
-            displayStory();
-        }
+        const carLeft = parseInt(window.getComputedStyle(car).getPropertyValue('left'));
+        const carBottom = parseInt(window.getComputedStyle(car).getPropertyValue('bottom'));
+        const enemyLeft = parseInt(window.getComputedStyle(enemy).getPropertyValue('left'));
+        const enemyTop = parseInt(window.getComputedStyle(enemy).getPropertyValue('top'));
 
-        function downloadVideo() {
-            const link = document.createElement('a');
-            link.href = 'https://example.com/video.mp4'; // Substitua pelo link correto do vídeo
-            link.download = 'historia_de_abraao.mp4';
-            link.click();
+        if (
+          carLeft < enemyLeft + 40 &&
+          carLeft + 40 > enemyLeft &&
+          carBottom < enemyTop + 40 &&
+          carBottom + 40 > enemyTop
+        ) {
+          isGameOver = true;
+          alert('Game Over! Your score is ' + score);
+          window.location.reload();
         }
+      });
+    }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            displayStory();
-            document.getElementById('backgroundMusic').play();
-        });
-    </script>
+    function gameLoop() {
+      if (!isGameOver) {
+        createEnemy();
+        moveEnemies();
+        requestAnimationFrame(gameLoop);
+      }
+    }
+
+    gameLoop();
+  </script>
 </body>
 </html>
