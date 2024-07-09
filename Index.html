@@ -61,14 +61,23 @@
       <p>Score: <span id="score">0</span></p>
     </div>
   </div>
+  
+  <audio id="backgroundMusic" src="musica.mp3" type="audio/mp3"></audio>
+  
   <script>
     const car = document.getElementById('car');
     const gameArea = document.getElementById('gameArea');
     const scoreBoard = document.getElementById('score');
+    const backgroundMusic = document.getElementById('backgroundMusic');
     let score = 0;
     let gameSpeed = 2;
     let enemies = [];
     let isGameOver = false;
+
+    // Play background music when the page loads
+    window.onload = () => {
+      backgroundMusic.play();
+    };
 
     document.addEventListener('keydown', moveCar);
 
